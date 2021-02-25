@@ -13,8 +13,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-
-/** This is a demo program showing how to use Mecanum control with the RobotDrive class. */
 public class Robot extends TimedRobot {
 
   private MecanumDrive m_robotDrive;
@@ -31,7 +29,6 @@ public class Robot extends TimedRobot {
     //Giving Spark Maxs there motor positions and the intiger that is assosciated with them.
     //To change Spark Max Intigers use Rev Hardware Client found on Desktop
     //MotorType is the tpye of motor we are using with the motor controller.
-    //If you wish to attatch a motor that is not burshless make sure to connect to Spark Max with USB C cord and adjust that as neccessary in Rev Hardware Client
     CANSparkMax frontLeft = new CANSparkMax(4, MotorType.kBrushless);
     CANSparkMax rearLeft = new CANSparkMax(5, MotorType.kBrushless);
     CANSparkMax frontRight = new CANSparkMax(1, MotorType.kBrushless);
@@ -47,10 +44,10 @@ public class Robot extends TimedRobot {
     frontRight.setInverted(true);
     rearRight.setInverted(true);
 
-    //giving m_robotDrive the motors it asks for
+    //giving m_robotDrive the motors it requires.
     m_robotDrive = new MecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
 
-    //The Xbox Controller and the input intiger that corresponds with its usb port
+    //The Xbox Controller and the input intiger that corresponds with its usb port.
     controller = new XboxController(0);
   }
 
