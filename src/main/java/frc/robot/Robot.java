@@ -53,22 +53,23 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    // Use the joystick raw axis 1 for fowards and backwards movement
-    // Use the joystick raw axis 0 for left and right movement
-    //Use the joystick raw axis 4 for strafe movement
+    /*Use the joystick raw axis 1 for fowards and backwards movement
+    Use the joystick raw axis 0 for left and right movement
+    Use the joystick raw axis 4 for strafe movement*/
+
+    //This is untested Code for trying to implement a deadband for the Xbox controller
+    //The deadband Utility can be found under Utilities.java
+
+    //The getDeadBand funtion will take joystick input and prevent that value from moving the robot if user input is within given range which is currently .2 and -.2
+    m_robotDrive.driveCartesian(utils.getDeadBand(controller.getY(Hand.kLeft), .2), utils.getDeadBand(controller.getX(Hand.kLeft), .2), utils.getDeadBand(controller.getX(Hand.kRight), .2), 0);
+
     //This code was working originally but needed to be altared for a deadband fix for the controllers
     //m_robotDrive.driveCartesian(controller.getY(Hand.kLeft), controller.getX(Hand.kLeft), controller.getX(Hand.kRight), 0);
-
-    //This is untested Code for trying to implement a deadband for the Xbox controller on our 2021 mecanum drive robot
-    //THe deadband Utility can be found under Utilities.java
-
-    //The getDeadBand funtion will take joystick input and prevent that value from moving the robot if user input is lower than required value which is currently .2
-    m_robotDrive.driveCartesian(utils.getDeadBand(controller.getY(Hand.kLeft), .2), utils.getDeadBand(controller.getX(Hand.kLeft), .2), utils.getDeadBand(controller.getX(Hand.kRight), .2), 0);
 
     //This is where we will put things we wish to observe on the dashboard.
     //SmartDashboard is the utility we wish to use
 
-    //These Specifically send the voltage that each motor controller is recieiving to the SmartDashboard
+    //These send the voltage that each motor controller is recieiving to the SmartDashboard
     SmartDashboard.putNumber("Front Left Voltage", FLVoltage);
     SmartDashboard.putNumber("Back Left Voltage", BLVoltage);
     SmartDashboard.putNumber("Front Right Voltage", FRVoltage);
