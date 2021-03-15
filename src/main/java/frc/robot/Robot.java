@@ -19,7 +19,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Robot extends TimedRobot {
 
-  private MecanumDrive m_robotDrive;
   private XboxController controller;
   private Utilities utils;
 
@@ -45,6 +44,8 @@ public class Robot extends TimedRobot {
     frontRight = new CANSparkMax(1, MotorType.kBrushless);
     rearRight = new CANSparkMax(2, MotorType.kBrushless);
 
+    utils = new Utilities();
+
     //These are to return the voltage values we are getting for each motor to the SmartDashboard
     FLVoltage = frontLeft.getBusVoltage();
     BLVoltage = frontLeft.getBusVoltage();
@@ -54,34 +55,24 @@ public class Robot extends TimedRobot {
     //Invert motor direction
     frontRight.setInverted(false);
     frontLeft.setInverted(true);
-    rearRight.setInverted(true);
-    rearLeft.setInverted(false);
-
-    //giving m_robotDrive the motors it requires.
-    //m_robotDrive = new MecanumDrive(frontLeft, rearLeft, frontRight, rearRight);
+    rearRight.setInverted(false);
+    rearLeft.setInverted(true);
 
     //The Xbox Controller and the input intiger that corresponds with its usb port.
     controller = new XboxController(0);
 
-    Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-    Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-    Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-    Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+    double widthValue = 0.26;
+    double lengthValue = 0.29;
+    Translation2d m_frontLeftLocation = new Translation2d(lengthValue, widthValue);
+    Translation2d m_frontRightLocation = new Translation2d(lengthValue, -1*widthValue);
+    Translation2d m_backLeftLocation = new Translation2d(-1*lengthValue, widthValue);
+    Translation2d m_backRightLocation = new Translation2d(-1*lengthValue, -1*widthValue);
 
     // Creating my kinematics object using the wheel locations.
     m_kinematics = new MecanumDriveKinematics(
       m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation
     );
 
-  }
-
-  protected double deadband(double value) {
-    double deadband = 0.05;
-    if (Math.abs(value) <= deadband) {
-      return 0.0;
-    } else {
-      return value;
-    }
   }
 
   @Override
@@ -95,14 +86,10 @@ public class Robot extends TimedRobot {
 
     //The getDeadBand funtion will take joystick input and prevent that value from moving the robot if user input is within given range which is currently .2 and -.2
     double speedFactor = 0.25;
-    double leftY = deadband(controller.getY(Hand.kLeft)*speedFactor);
-    double leftX = deadband(controller.getX(Hand.kLeft)*speedFactor);
-    double rightX = deadband(controller.getX(Hand.kRight)*speedFactor);
-    //m_robotDrive.driveCartesian(utils.getDeadBand(controller.getY(Hand.kLeft), .2), utils.getDeadBand(controller.getX(Hand.kLeft), .2), utils.getDeadBand(controller.getX(Hand.kRight), .2), 0);
-
-    System.out.println(leftY + "; " + leftX + "; " + rightX);
-    //m_robotDrive.driveCartesian(leftY, leftX, rightX);
-
+    double leftY = utils.deadband(controller.getY(Hand.kLeft)*speedFactor);
+    double leftX = utils.deadband(controller.getX(Hand.kLeft)*speedFactor);
+    double rightX = utils.deadband(controller.getX(Hand.kRight)*speedFactor);
+    
     ChassisSpeeds speeds = new ChassisSpeeds(leftY, leftX, rightX);    
     MecanumDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
 
@@ -116,10 +103,6 @@ public class Robot extends TimedRobot {
     rearLeft.set(spBackLeft);
     rearRight.set(spBackRight);
     
-    //e480tyfg
-    //This code was working originally but needed to be altared for a deadband fix for the controllers
-    //m_robotDrive.driveCartesian(controller.getY(Hand.kLeft), controller.getX(Hand.kLeft), controller.getX(Hand.kRight), 0);
-
     //This is where we will put things we wish to observe on the dashboard.
     //SmartDashboard is the utility we wish to use
 
