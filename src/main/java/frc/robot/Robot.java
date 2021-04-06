@@ -85,7 +85,7 @@ public class Robot extends TimedRobot {
     //The deadband Utility can be found under Utilities.java
 
     //The getDeadBand funtion will take joystick input and prevent that value from moving the robot if user input is within given range which is currently .2 and -.2
-    double speedFactor = 0.25;
+    double speedFactor = 0.50;
     double leftY = utils.deadband(controller.getY(Hand.kLeft)*speedFactor);
     double leftX = utils.deadband(controller.getX(Hand.kLeft)*speedFactor);
     double rightX = utils.deadband(controller.getX(Hand.kRight)*speedFactor);
